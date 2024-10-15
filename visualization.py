@@ -24,7 +24,8 @@ def line_plot_of_laptimes(lap_times_df):
 
 
 def box_plot_laptimes(lap_times_df):
-    fig = px.box(lap_times_df, y=lap_times_df.columns, title='Lap Times Box Plot')
+    fig = px.box(lap_times_df, y=lap_times_df.columns, title='Lap Times Box Plot', 
+                 labels={"value":"Lap Times", "variable":"Driver"})
     fig.update_layout(yaxis_range=[105,125])
     fig.show()
     return fig
