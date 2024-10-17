@@ -4,7 +4,7 @@ from data_processing import load_session_data, get_unique_lap_numbers, get_uniqu
 from visualization import plot_heatmap_of_laptimes, line_plot_of_laptimes, box_plot_laptimes
 from constants import drivers, teams
 
-st.title("F1 Race Data Graphs")
+st.title("Formula 1 Data Visualization")
 
 country = st.text_input("Enter the country of the race", "Belgium")
 df = load_session_data(country)
