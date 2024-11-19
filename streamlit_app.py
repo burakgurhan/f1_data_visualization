@@ -59,7 +59,7 @@ st.plotly_chart(heatmap)
 
 # 6. Line Graph for Lap times of Drivers 
 st.header("Line Graph for Lap times of Drivers")
-lineplot = line_plot_of_laptimes(lap_times_df)
+lineplot = line_plot_of_laptimes(lap_times_df,top_10_df)
 st.plotly_chart(lineplot)
 
 
