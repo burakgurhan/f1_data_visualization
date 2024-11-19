@@ -93,7 +93,7 @@ class GetDataframes:
 
 def load_session_data(country):
     # API Connection
-    response = urlopen(f'https://api.openf1.org/v1/sessions?circuit_short_name={country}&session_name=Race&year=2024')
+    response = urlopen(f'https://api.openf1.org/v1/sessions?circuit_short_name={country.replace(" ", "+")}&session_name=Race&year=2024')
     # Get session_key to access details of the race.
     session_info = json.loads(response.read().decode('utf-8'))
     # Get session key.
