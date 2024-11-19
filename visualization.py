@@ -18,7 +18,7 @@ def plot_heatmap_of_laptimes(lap_times_df):
 def line_plot_of_laptimes(lap_times_df,top_10_finish_df):
     lower_bound = round(lap_times_df.min().min())-1
     upper_bound = round(lap_times_df.quantile().max())+3
-    fig = px.line(data_frame=lap_times_df[top_10_finish_df["Driver"]],
+    fig = px.line(data_frame=lap_times_df[top_10_finish_df["Driver"][:6]],
                   )
     fig.update_layout(yaxis_range=[lower_bound, upper_bound])
     return fig
