@@ -11,3 +11,14 @@ teams = {
     "TSU": "VCA", "ALB": "WIL", "ZHU": "SAU", "HUL": "HAS", "OCO": "ALP",
     "HAM": "MER", "SAI": "FER", "RUS": "MER", "BOT": "SAU", "PIA": "MCL"
 }
+
+team_colors = {'Red Bull Racing': 'cornflowerblue',
+        'Williams': 'lightblue',
+        'RB': 'lightpink',
+        'McLaren': 'orange',
+        'Alpine': 'darkblue',
+        'Aston Martin': 'green',
+        'Ferrari': 'red',
+        'Haas F1 Team': 'white',
+        'Kick Sauber': 'lightgreen',
+        'Mercedes': 'silver'}

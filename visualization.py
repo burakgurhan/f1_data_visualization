@@ -13,17 +13,17 @@ def plot_heatmap_of_laptimes(lap_times_df):
         colorscale='hot'))
     fig.update_layout(
         title='Heatmap of Lap Times')
-    fig.show()
     return fig
 
 def line_plot_of_laptimes(lap_times_df):
     lower_bound = round(lap_times_df.min().min())-1
     upper_bound = round(lap_times_df.quantile().max())+3
-    fig = px.line(data_frame=lap_times_df, line_shape='spline', title="Belgian GP Lap Times",
+    fig = px.line(data_frame=lap_times_df, 
+                  #line_shape='spline', 
+                  title="Lap Times",
               
               labels={"value":"Lap Times", "index":"Laps"})
     fig.update_layout(yaxis_range=[lower_bound, upper_bound])
-    fig.show()
     return fig
 
 
@@ -33,5 +33,25 @@ def box_plot_laptimes(lap_times_df):
     fig = px.box(lap_times_df, y=lap_times_df.columns, title='Lap Times Box Plot', 
                  labels={"value":"Lap Times", "variable":"Driver"})
     fig.update_layout(yaxis_range=[lower_bound, upper_bound])
-    fig.show()
+    return fig
+
+
+def plot_team_performance(team_performance_df, team_colors):
+    fig = px.bar(data_frame=team_performance_df,
+             x="Teams",
+             y="Team Differences",
+             title="Team Comparision",
+             labels={"value":"Secons"},
+             color="Teams",
+             color_discrete_map=team_colors
+             )
+    return fig
+
+def plot_top10(top_10_finish_df, country):
+    fig = px.bar(top_10_finish_df,
+                x="Driver",
+                y="Points",
+                color="Driver Colour",
+                title=f"{country} GP Top 10"
+       )
     return fig
