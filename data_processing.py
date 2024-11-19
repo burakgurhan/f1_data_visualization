@@ -70,6 +70,7 @@ class GetDataframes:
 
         lap_times_df = lap_times_df.astype(float)
         lap_times_df.columns = driver_df["name_acronym"]
+        lap_times_df.fillna(method="bfill", inplace=True)
         return lap_times_df
 
     def get_driver_performance(lap_times_df, driver_df):
@@ -84,7 +85,6 @@ class GetDataframes:
     
     def get_teams_performance(driver_comparision_df):
         avg_team_times_df = driver_comparision_df.groupby("Teams")["Average Lap Times of Drivers"].mean().rename({"Average Lap Times of Drivers":"Average Lap Times of Teams"}).sort_values()
-
         avg_team_times_df = avg_team_times_df.reset_index(name="Average Lap Times of Teams")
         avg_team_times_df["Team Differences"] = avg_team_times_df["Average Lap Times of Teams"] - avg_team_times_df["Average Lap Times of Teams"].min()
         return avg_team_times_df

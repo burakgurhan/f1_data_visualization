@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from data_processing import load_session_data
 from data_processing import GetDataframes
-from visualization import plot_heatmap_of_laptimes, line_plot_of_laptimes, box_plot_laptimes, plot_team_performance, plot_top10
+from visualization import *
 from constants import drivers, teams
 from urllib.request import urlopen
 import json
@@ -42,17 +42,13 @@ st.plotly_chart(barplot)
 
 
 # 2. Race Results
-st.dataframe(positions_df)
+st.subheader("Positions")
+st.dataframe(positions_df[10:], hide_index=True)
 
 
 # 3. Fastest Lap
 st.subheader("Fastest Lap")
 st.dataframe(fastest_lap)
-
-
-# 4. Lap times of All Drivers
-st.header("Lap Times of Drivers")
-st.dataframe(lap_times_df)
 
 
 # 5. Heatmap
@@ -76,15 +72,18 @@ st.plotly_chart(boxplot)
 # 8. Driver Comparision
 st.subheader("Driver Comparisions")
 driver_comparision_df = GetDataframes.get_driver_performance(lap_times_df, driver_df)
-st.dataframe(driver_comparision_df)
+st.dataframe(driver_comparision_df, hide_index=True)
 
 
 # 9. Performance of the Teams
 st.header("Performance of the Teams")
 team_performance_df = GetDataframes.get_teams_performance(driver_comparision_df)
 team_performance = plot_team_performance(team_performance_df, team_colors)
-st.plotly_chart(boxplot)
+st.plotly_chart(team_performance)
 
 
+# 4. Lap times of All Drivers
+st.header("Lap Times of Drivers")
+st.dataframe(lap_times_df)
 
 
