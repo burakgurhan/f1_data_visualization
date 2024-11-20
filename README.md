@@ -5,7 +5,7 @@ This project uses Python and Streamlit to create interactive visualizations of F
 * Interactive Visualizations: Explore various charts and graphs displaying drivers' lap times, enabling insightful comparisons and analysis.
 * User-Friendly Interface: Built with Streamlit, the application provides a clean and intuitive interface, requiring minimal technical expertise to use.
 * Data Filtering and Customization: Users can filter data to focus on specific drivers, races, or time periods, allowing for tailored analysis. (Note: The level of customization may depend on the data included.)
-## Data Source: (Specify the data source used here. e.g., "Data is sourced from [link to data source, if applicable], providing up-to-date information.")
+
 Getting Started
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
