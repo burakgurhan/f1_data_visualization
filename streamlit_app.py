@@ -18,7 +18,7 @@ calendar_df = GetDataframes.load_calendar()
 location_list = calendar_df["circuit_short_name"].values
 st.title("Formula 1 Data Visualization")
 
-location = st.selectbox(label="Select the race location.", options=location_list, placeholder="Choose a race")
+location = st.sidebar.selectbox(label="Select the race location.", options=location_list, placeholder="Choose a race")
 
 # Load all dataframes
 df, session_key = load_session_data(location)   
