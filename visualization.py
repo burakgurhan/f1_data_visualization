@@ -45,10 +45,11 @@ def plot_team_performance(team_performance_df, team_colors):
     return fig
 
 def plot_top10(top_10_finish_df, country):
-    fig = px.bar(top_10_finish_df,
-                x="Driver",
-                y="Points",
+    top_10_finish_df_sorted = top_10_finish_df.sort_values(by="Points", ascending=True)
+    fig = px.bar(top_10_finish_df_sorted,
+                y="Driver",
+                x="Points",
                 #color="Driver Colour",
-                title=f"{country} GP Top 10"
-                )
+                title=f"{country} GP Top 10", 
+                orientation='h')
     return fig

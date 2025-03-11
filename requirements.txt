@@ -4,3 +4,8 @@ plotly
 matplotlib
 seaborn
 streamlit
+python-dotenv
+langchain
+langchain-community
+langchain-core
+groq
