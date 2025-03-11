@@ -10,7 +10,7 @@ from groq_integration import Summary
 st.title("Formula 1 Data Visualization")
 
 # Sidebar
-year = st.sidebar.select_box("Select Year", [2023, 2024, 2025], index=1)
+year = st.sidebar.selectbox("Select Year", [2023, 2024, 2025], index=1)
 
 ## Get Country and Meeting Names
 def get_country_names(year):
