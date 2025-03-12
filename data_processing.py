@@ -10,6 +10,15 @@ class GetDataframes:
         calendar_data = json.loads(response.read().decode('utf-8'))
         return pd.DataFrame(calendar_data)
     
+    ## Get Country and Meeting Names
+    def get_country_names(year):
+        response = urlopen(f'https://api.openf1.org/v1/meetings?year={year}')
+        data = json.loads(response.read().decode('utf-8'))
+        country_names = [item["country_name"] for item in data]
+        meeting_names = [item["meeting_name"] for item in data]
+        display_names = [f"{country_name} - {meeting_name}" for country_name, meeting_name in zip(country_names, meeting_names)]
+        return country_names, meeting_names, display_names
+    
     def drivers_dataframe(session_key):
         response = urlopen(f'https://api.openf1.org/v1/drivers?session_key={session_key}')
         driver_data = json.loads(response.read().decode('utf-8'))
@@ -107,9 +116,9 @@ class GetDataframes:
         return speed_trap_df, fastest_in_speed_trap
     
     def get_pit_intervals(session_key, driver_df):
-        response = urlopen(f'https://api.openf1.org/v1/pit?session_key={session_key}&pit_duration<31')
+        response = urlopen(f'https://api.openf1.org/v1/pit?session_key={session_key}&pit_duration<40')
         fastest_pit_stop = pd.DataFrame(json.loads(response.read().decode('utf-8')))
-        fastest_pit_stop.drop(["session_key", "meeting_key", "date"], axis=1, inplace=True)
+        fastest_pit_stop = fastest_pit_stop[["driver_number", "lap_number", "pit_duration"]]
         fastest_pit_stop = fastest_pit_stop.sort_values(by="pit_duration").head(1)
         # Convert driver_number to a list
         fastest_pit_stop["driver_name"] = fastest_pit_stop["driver_number"].apply(
