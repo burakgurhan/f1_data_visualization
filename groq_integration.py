@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 import os
 import groq
+import streamlit as st
 load_dotenv()
 
 class Summary():
@@ -14,6 +15,7 @@ class Summary():
         self.speed_trap = speed_trap_df.to_json(orient='columns')
         self.model_name = "llama-3.3-70b-versatile"
         self.api_key = os.environ["GROQ_API_KEY"]
+        self.api_key_st = st.secrets["API"]["KEY"]
         self.max_tokens = 500
         self.temperature = 0.1
         self.top_p = 0.95
@@ -53,7 +55,7 @@ Detailed Instructions:
     def create_summary(self):
         prompt = self.create_prompt()
 
-        client = groq.Client(api_key=self.api_key)
+        client = groq.Client(api_key=self.api_key_st)
 
         response = client.chat.completions.create(
             model=self.model_name,
