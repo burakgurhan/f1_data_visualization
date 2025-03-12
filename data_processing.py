@@ -17,7 +17,8 @@ class GetDataframes:
         driver_numbers = list(driver_df["driver_number"].unique())
         driver_df["full_name"] = driver_df["first_name"] + " " + driver_df["last_name"]
         driver_df["driver_colour"] = driver_df["team_name"].map(team_colors)
-        return driver_df, team_colors
+        driver_dict = driver_df.to_dict(orient="records")
+        return driver_df, team_colors, driver_dict
     
 
     def positions_dataframe(session_key, driver_df):
@@ -32,7 +33,9 @@ class GetDataframes:
     def fastest_lap_df(lap_times_df):
         fastest_lap_df = lap_times_df.min().sort_values().reset_index(name="Fastest Lap")
         fastest_lap_df.columns = ["Driver Acronym", "Fastest Lap"]
-        return fastest_lap_df.iloc[:5]
+        fastest_lap = fastest_lap_df.iloc[0]
+        fastest_lap = fastest_lap.to_dict()
+        return fastest_lap_df.iloc[:5], fastest_lap
     
     def top_10_dataframe(position_df, driver_df):
         points = [25,18,15,12,10,8,6,4,2,1]
@@ -40,7 +43,10 @@ class GetDataframes:
         top_10_finish_df = pd.DataFrame({"Driver Number":top_10_finish["Driver Number"], "Points":points})
         top_10_finish_df["Driver"] = [driver_df[driver_df["driver_number"]==x]["name_acronym"].values[0] for x in top_10_finish_df["Driver Number"].values]
         top_10_finish_df["Driver Colour"] = [driver_df[driver_df["driver_number"]==x]["driver_colour"].values[0] for x in top_10_finish_df["Driver Number"].values]
-        return top_10_finish_df
+        podium_df = position_df.iloc[:3]
+        podium = podium_df.to_dict(orient="records")
+        top_10_dict=top_10_finish_df.to_dict(orient="records")
+        return top_10_finish_df, podium, top_10_dict
 
     def lap_times_df(df: pd.DataFrame, driver_df: pd.DataFrame):
         lap_numbers = list(df.lap_number.unique())
@@ -93,7 +99,26 @@ class GetDataframes:
             speed_trap_df.columns = speed_trap_df.columns.map(dict(zip(driver_df["driver_number"].values, driver_df["name_acronym"].values)))
         except ValueError as v:
             print(f"Error: {v}")
-        return speed_trap_df
+        fastest_in_speed_trap = speed_trap_df.max().reset_index(name="Speed Trap Value").sort_values(by="Speed Trap Value", ascending=False).iloc[0]
+        fastest_in_speed_trap = fastest_in_speed_trap.to_dict()
+        return speed_trap_df, fastest_in_speed_trap
+    
+    def get_pit_intervals(session_key, driver_df):
+        response = urlopen(f'https://api.openf1.org/v1/pit?session_key={session_key}&pit_duration<31')
+        fastest_pit_stop = pd.DataFrame(json.loads(response.read().decode('utf-8')))
+        fastest_pit_stop.drop(["session_key", "meeting_key", "date"], axis=1, inplace=True)
+        fastest_pit_stop = fastest_pit_stop.sort_values(by="pit_duration").head(1)
+        # Convert driver_number to a list
+        fastest_pit_stop["driver_name"] = fastest_pit_stop["driver_number"].apply(
+            lambda x: driver_df[driver_df["driver_number"] == int(x)]["full_name"].values[0]
+        )
+
+        fastest_pit_stop["team_name"] = fastest_pit_stop["driver_number"].apply(
+            lambda x: driver_df[driver_df["driver_number"] == int(x)]["team_name"].values[0]
+        )
+
+        fastest_pit_stop_dict = fastest_pit_stop.to_dict(orient="records")
+        return fastest_pit_stop_dict
 
 def load_session_data(country, year):
     # API Connection
@@ -102,6 +127,7 @@ def load_session_data(country, year):
     session_info = json.loads(response.read().decode('utf-8'))
     # Get session key.
     session_key = session_info[0]["session_key"]
+    circuit_name = session_info[0]["circuit_short_name"]
 
     # Query for race.
     response = urlopen(f'https://api.openf1.org/v1/laps?session_key={session_key}')
@@ -110,4 +136,4 @@ def load_session_data(country, year):
 
     df = pd.DataFrame(data=data)
 
-    return df, session_key
+    return df, session_key, circuit_name

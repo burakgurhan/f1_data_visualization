@@ -1,11 +1,11 @@
+import json
+import urllib
 import streamlit as st
+from urllib.request import urlopen
 from data_processing import load_session_data
 from data_processing import GetDataframes
 from visualization import *
-from urllib.request import urlopen
-import json
-import urllib
-from groq_integration import Summary
+from groq_integration import create_race_summary
 
 st.title("Formula 1 Data Visualization")
 
@@ -28,15 +28,21 @@ selected_meeting_name = selected_race_name.split(" - ")[1]
 encoded_country_name = urllib.parse.quote(selected_country_name)
 
 # Load all dataframes
-df, session_key = load_session_data(encoded_country_name, year)   
-driver_df, team_colors = GetDataframes.drivers_dataframe(session_key=session_key)    # Driver and team informaitons
+df, session_key, circuit_name = load_session_data(encoded_country_name, year)   
+driver_df, team_colors, driver_dict = GetDataframes.drivers_dataframe(session_key=session_key)    # Driver and team informaitons
 lap_times_df = GetDataframes.lap_times_df(df, driver_df)
 positions_df = GetDataframes.positions_dataframe(session_key, driver_df)
-fastest_lap = GetDataframes.fastest_lap_df(lap_times_df)
-top_10_df = GetDataframes.top_10_dataframe(positions_df, driver_df)
-speed_trap_df = GetDataframes.get_speed_trap_df(df, driver_df)
+fastest_lap_df, fastest_lap = GetDataframes.fastest_lap_df(lap_times_df)
+top_10_df, podium, top_10 = GetDataframes.top_10_dataframe(positions_df, driver_df)
+speed_trap_df, fastest_in_speed_trap = GetDataframes.get_speed_trap_df(df, driver_df)
+fastest_pit_stop_dict = GetDataframes.get_pit_intervals(session_key, driver_df)
 
-
+# Create race_info dictionary
+race_info = {}
+race_info["Year"] = year
+race_info["Country"] = selected_country_name
+race_info["Meeting Name"] = selected_meeting_name
+race_info["Circuit"] = circuit_name
 
 # 1. Top 10 Finishers
 st.header("Race Results")
@@ -52,15 +58,20 @@ st.dataframe(positions_df[10:], hide_index=True)
 
 # 3. Fastest Lap
 st.subheader("Fastest Lap")
-st.write(f"The fastest lap of the race is {fastest_lap.iloc[0].values[1]} succeded by {fastest_lap.iloc[0].values[0]}.")
-st.dataframe(fastest_lap, use_container_width=False, hide_index=True)
+st.write(f"The fastest lap of the race is {fastest_lap_df.iloc[0].values[1]} succeded by {fastest_lap_df.iloc[0].values[0]}.")
+st.dataframe(fastest_lap_df, use_container_width=False, hide_index=True)
 
 
 # 4. AI Race Summary
-summary_gen = Summary(
-    year, country_names, lap_times_df, fastest_lap, top_10_df, speed_trap_df, driver_df
+race_summary = create_race_summary(
+    race_info,
+    driver_dict,
+    podium,
+    top_10,
+    fastest_lap,
+    fastest_in_speed_trap,
+    fastest_pit_stop_dict
 )
-race_summary = summary_gen.create_summary()
 st.header("AI Race Summary")
 st.write(race_summary)
 
