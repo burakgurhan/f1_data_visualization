@@ -17,6 +17,7 @@ class GetDataframes:
         driver_numbers = list(driver_df["driver_number"].unique())
         driver_df["full_name"] = driver_df["first_name"] + " " + driver_df["last_name"]
         driver_df["driver_colour"] = driver_df["team_name"].map(team_colors)
+        driver_df = driver_df[["country_code", "full_name", "driver_number", "team_name", "name_acronym", "driver_colour"]].copy()
         driver_dict = driver_df.to_dict(orient="records")
         return driver_df, team_colors, driver_dict
     
@@ -27,12 +28,14 @@ class GetDataframes:
         position_df = pd.DataFrame(position_data)
         position_df = position_df.groupby("position")["driver_number"].last().reset_index()
         position_df["Driver"] = [driver_df[driver_df["driver_number"]==x]["full_name"].values[0] for x in position_df['driver_number'].values]
-        position_df.columns = ["Result" , "Driver Number", "Driver"]
+        position_df["Team"] = [driver_df[driver_df["driver_number"]==x]["team_name"].values[0] for x in position_df['driver_number'].values]
+        position_df.columns = ["Result" , "Driver Number", "Driver", "Team"]
         return position_df
 
-    def fastest_lap_df(lap_times_df):
+    def fastest_lap_df(lap_times_df, driver_df):
         fastest_lap_df = lap_times_df.min().sort_values().reset_index(name="Fastest Lap")
         fastest_lap_df.columns = ["Driver Acronym", "Fastest Lap"]
+        fastest_lap_df["Driver Name"] = [driver_df[driver_df["name_acronym"]==x]["full_name"].values for x in fastest_lap_df["Driver Acronym"].values]
         fastest_lap = fastest_lap_df.iloc[0]
         fastest_lap = fastest_lap.to_dict()
         return fastest_lap_df.iloc[:5], fastest_lap

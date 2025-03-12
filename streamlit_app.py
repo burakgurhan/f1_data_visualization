@@ -32,7 +32,7 @@ df, session_key, circuit_name = load_session_data(encoded_country_name, year)
 driver_df, team_colors, driver_dict = GetDataframes.drivers_dataframe(session_key=session_key)    # Driver and team informaitons
 lap_times_df = GetDataframes.lap_times_df(df, driver_df)
 positions_df = GetDataframes.positions_dataframe(session_key, driver_df)
-fastest_lap_df, fastest_lap = GetDataframes.fastest_lap_df(lap_times_df)
+fastest_lap_df, fastest_lap = GetDataframes.fastest_lap_df(lap_times_df, driver_df)
 top_10_df, podium, top_10 = GetDataframes.top_10_dataframe(positions_df, driver_df)
 speed_trap_df, fastest_in_speed_trap = GetDataframes.get_speed_trap_df(df, driver_df)
 fastest_pit_stop_dict = GetDataframes.get_pit_intervals(session_key, driver_df)
