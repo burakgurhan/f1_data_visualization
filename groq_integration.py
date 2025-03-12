@@ -4,6 +4,15 @@ import groq
 import streamlit as st
 load_dotenv()
 
+# Load API key
+api_key = st.secrets.get("API", {}).get("KEY", None)
+
+# Debugging
+if api_key:
+    st.write("API key loaded successfully (hidden for security)")
+else:
+    st.error("API key not found! Check Streamlit secrets.")
+
 class Summary():
     def __init__(self, year, race_name, lap_times_df, fastest_lap, top_10_df, speed_trap_df, driver_df):
         self.year = year
@@ -15,7 +24,6 @@ class Summary():
         self.speed_trap = speed_trap_df.to_json(orient='columns')
         self.model_name = "llama-3.3-70b-versatile"
         self.api_key = os.environ["GROQ_API_KEY"]
-        self.api_key_st = st.secrets["API"]["KEY"]
         self.max_tokens = 500
         self.temperature = 0.1
         self.top_p = 0.95
@@ -55,7 +63,7 @@ Detailed Instructions:
     def create_summary(self):
         prompt = self.create_prompt()
 
-        client = groq.Client(api_key=self.api_key_st)
+        client = groq.Client(api_key=api_key)
 
         response = client.chat.completions.create(
             model=self.model_name,
