@@ -39,10 +39,7 @@ class Summary:
         """
         self.race_data = race_data
         self.model_name = model_name
-        self.api_key = os.environ["GROQ_API_KEY"]
-
-        if not self.api_key:
-            raise ValueError("GROQ_API_KEY environment variable not set")
+        
         
         self.llm_parameters = {
             "max_tokens": 500,
