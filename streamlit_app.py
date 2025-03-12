@@ -65,7 +65,7 @@ st.dataframe(fastest_lap_df, use_container_width=False, hide_index=True)
 # 4. AI Race Summary
 race_summary = create_race_summary(
     race_info,
-    driver_dict,
+    #driver_dict,
     podium,
     top_10,
     fastest_lap,

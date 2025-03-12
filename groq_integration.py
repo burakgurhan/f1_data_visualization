@@ -17,7 +17,7 @@ else:
 @dataclass
 class RaceData:
     race_info:dict
-    driver_dict:dict
+    #driver_dict:dict
     podium:dict
     top_10:dict
     fastest_lap:dict
@@ -115,7 +115,7 @@ Never speculate or add information not present in the data."""
         return summary
     
 def create_race_summary(race_info,
-    driver_dict,
+    #driver_dict,
     podium,
     top_10,
     fastest_lap,
@@ -125,7 +125,7 @@ def create_race_summary(race_info,
     # Create race data object
     race_data = RaceData(
         race_info,
-    driver_dict,
+    #driver_dict,
     podium,
     top_10,
     fastest_lap,
