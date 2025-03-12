@@ -39,7 +39,7 @@ class Summary:
         """
         self.race_data = race_data
         self.model_name = model_name
-        
+        self.api_key = api_key
         
         self.llm_parameters = {
             "max_tokens": 500,
