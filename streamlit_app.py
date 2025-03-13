@@ -35,25 +35,8 @@ race_info["Country"] = selected_country_name
 race_info["Meeting Name"] = selected_meeting_name
 race_info["Circuit"] = circuit_name
 
-# 1. Top 10 Finishers
-st.header("Race Results")
-st.subheader("Top 10 Finishers")
-barplot = plot_top10(top_10_df, selected_meeting_name)
-st.plotly_chart(barplot)
 
-
-# 2. Race Results
-st.subheader("Positions")
-st.dataframe(position_df[10:], hide_index=True)
-
-
-# 3. Fastest Lap
-st.subheader("Fastest Lap")
-st.write(f"The fastest lap of the race is {fastest_lap_df.iloc[0].values[1]} succeded by {fastest_lap_df.iloc[0].values[0]}.")
-st.dataframe(fastest_lap_df, use_container_width=False, hide_index=True)
-
-
-# 4. AI Race Summary
+# 1. AI Race Summary
 race_summary = create_race_summary(
     race_info,
     driver_dict,
@@ -65,6 +48,24 @@ race_summary = create_race_summary(
 )
 st.header("AI Race Summary")
 st.write(race_summary)
+
+
+# 2. Top 10 Finishers
+st.header("Race Results")
+st.subheader("Top 10 Finishers")
+barplot = plot_top10(top_10_df, selected_meeting_name)
+st.plotly_chart(barplot)
+
+
+# 3. Race Results
+st.subheader("Positions")
+st.dataframe(position_df[10:], hide_index=True)
+
+
+# 4. Fastest Lap
+st.subheader("Fastest Lap")
+st.write(f"The fastest lap of the race is {fastest_lap_df.iloc[0].values[1]} succeded by {fastest_lap_df.iloc[0].values[0]}.")
+st.dataframe(fastest_lap_df, use_container_width=False, hide_index=True)
 
 
 # 5. Heatmap
