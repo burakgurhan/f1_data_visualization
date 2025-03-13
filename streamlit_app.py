@@ -94,6 +94,7 @@ st.dataframe(driver_comparision_df, hide_index=True)
 
 # 9. Performance of the Teams
 st.header("Performance of the Teams")
+st.write("Derived from the average lap times of the drivers of each team.")
 team_performance_df = GetDataframes.get_teams_performance(driver_comparision_df)
 team_performance = plot_team_performance(team_performance_df, team_colors)
 st.plotly_chart(team_performance)
