@@ -10,7 +10,6 @@ class GetDataframes:
         calendar_data = json.loads(response.read().decode('utf-8'))
         return pd.DataFrame(calendar_data)
     
-    ## Get Country and Meeting Names
     def get_country_names(year):
         response = urlopen(f'https://api.openf1.org/v1/meetings?year={year}')
         data = json.loads(response.read().decode('utf-8'))
@@ -118,7 +117,6 @@ class GetDataframes:
     def get_pit_intervals(session_key, driver_df):
         response = urlopen(f'https://api.openf1.org/v1/pit?session_key={session_key}&pit_duration<40')
         fastest_pit_stop = pd.DataFrame(json.loads(response.read().decode('utf-8')))
-        fastest_pit_stop = fastest_pit_stop[["driver_number", "lap_number", "pit_duration"]].copy()
         fastest_pit_stop = fastest_pit_stop.sort_values(by="pit_duration").head(1)
         # Convert driver_number to a list
         fastest_pit_stop["driver_name"] = fastest_pit_stop["driver_number"].apply(
