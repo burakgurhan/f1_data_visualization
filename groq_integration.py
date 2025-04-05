@@ -6,7 +6,10 @@ import streamlit as st
 
 load_dotenv()
 # Load API key
-api_key = st.secrets.get("API", {}).get("KEY", None)
+try:
+    api_key = st.secrets.get("API", {}).get("KEY", None)
+except Exception:
+    api_key = os.getenv("GROQ_API_KEY")
 
 # Debugging
 if api_key:

@@ -100,12 +100,10 @@ team_performance = plot_team_performance(team_performance_df, team_colors)
 st.plotly_chart(team_performance)
 
 
-
 # 10. Speed Trap 
 st.header("Speed Trap")
 st.dataframe(speed_trap_df.max().reset_index(name="Max in Speed Trap"), hide_index=True, use_container_width=False)
+
 # 11. Lap times of All Drivers
 st.header("Lap Times of Drivers")
 st.dataframe(lap_times_df)
-
-
