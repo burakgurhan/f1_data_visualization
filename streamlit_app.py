@@ -12,28 +12,29 @@ st.title("Formula 1 Data Visualization")
 # Sidebar
 year = st.sidebar.selectbox("Select Year", [2023, 2024, 2025], index=2)
 
-country_names, meeting_names, display_names = GetDataframes.get_country_names(year)
-selected_race_name = st.sidebar.selectbox("Select Race", display_names, index=0)
-selected_country_name = selected_race_name.split(" - ")[0]
-selected_meeting_name = selected_race_name.split(" - ")[1]
-encoded_country_name = urllib.parse.quote(selected_country_name)
+with st.spinner("Loading data..."):
+    country_names, meeting_names, display_names = GetDataframes.get_country_names(year)
+    selected_race_name = st.sidebar.selectbox("Select Race", display_names, index=0)
+    selected_country_name = selected_race_name.split(" - ")[0]
+    selected_meeting_name = selected_race_name.split(" - ")[1]
+    encoded_country_name = urllib.parse.quote(selected_country_name)
 
-# Load all dataframes
-df, session_key, circuit_name = load_session_data(encoded_country_name, year)   
-driver_df, team_colors, driver_dict = GetDataframes.drivers_dataframe(session_key=session_key)    # Driver and team informaitons
-lap_times_df = GetDataframes.lap_times_df(df, driver_df)
-position_df = GetDataframes.positions_dataframe(session_key, driver_df)
-fastest_lap_df, fastest_lap = GetDataframes.fastest_lap_df(lap_times_df, driver_df)
-top_10_df, podium, top_10 = GetDataframes.top_10_dataframe(position_df, driver_df)
-speed_trap_df, fastest_in_speed_trap = GetDataframes.get_speed_trap_df(df, driver_df)
-fastest_pit_stop_dict = GetDataframes.get_pit_intervals(session_key, driver_df)
+    # Load all dataframes
+    df, session_key, circuit_name = load_session_data(encoded_country_name, year)   
+    driver_df, team_colors, driver_dict = GetDataframes.drivers_dataframe(session_key=session_key)    # Driver and team informaitons
+    lap_times_df = GetDataframes.lap_times_df(df, driver_df)
+    position_df = GetDataframes.positions_dataframe(session_key, driver_df)
+    fastest_lap_df, fastest_lap = GetDataframes.fastest_lap_df(lap_times_df, driver_df)
+    top_10_df, podium, top_10 = GetDataframes.top_10_dataframe(position_df, driver_df)
+    speed_trap_df, fastest_in_speed_trap = GetDataframes.get_speed_trap_df(df, driver_df)
+    fastest_pit_stop_dict = GetDataframes.get_pit_intervals(session_key, driver_df)
 
-# Create race_info dictionary
-race_info = {}
-race_info["Year"] = year
-race_info["Country"] = selected_country_name
-race_info["Meeting Name"] = selected_meeting_name
-race_info["Circuit"] = circuit_name
+    # Create race_info dictionary
+    race_info = {}
+    race_info["Year"] = year
+    race_info["Country"] = selected_country_name
+    race_info["Meeting Name"] = selected_meeting_name
+    race_info["Circuit"] = circuit_name
 
 
 # 1. AI Race Summary

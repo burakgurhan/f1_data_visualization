@@ -6,15 +6,19 @@ from urllib.request import urlopen
 from api_cache import cached_api_call
 
 class GetDataframes:
-    def load_calendar():
-        response = urlopen(f'https://api.openf1.org/v1/meetings?year=2024')
+    def __init__(self):
+        self.base_url = 'https://api.openf1.org/v1/'
+
+
+    def load_calendar(self):
+        response = urlopen(f'{self.base_url}meetings?year=2024')
         calendar_data = json.loads(response.read().decode('utf-8'))
         return pd.DataFrame(calendar_data)
     
-    @staticmethod
-    def get_country_names(year):
+
+    def get_country_names(self, year):
         try:
-            response = urlopen(f'https://api.openf1.org/v1/meetings?year={year}')
+            response = urlopen(f'{self.base_url}meetings?year={year}')
             data = json.loads(response.read().decode('utf-8'))
             country_names = [item["country_name"] for item in data]
             meeting_names = [item["meeting_name"] for item in data]
@@ -24,10 +28,10 @@ class GetDataframes:
             print(f"Error: {e}")
             return [], [], []
     
-    @staticmethod
-    def drivers_dataframe(session_key):
+
+    def drivers_dataframe(self, session_key):
         try:
-            response = urlopen(f'https://api.openf1.org/v1/drivers?session_key={session_key}')
+            response = urlopen(f'{self.base_url}drivers?session_key={session_key}')
             driver_data = json.loads(response.read().decode('utf-8'))
             driver_df = pd.DataFrame(driver_data)
             driver_numbers = list(driver_df["driver_number"].unique())
@@ -40,10 +44,10 @@ class GetDataframes:
             print(f"Error: {e}")
             return [], [], []
     
-    @staticmethod
-    def positions_dataframe(session_key, driver_df):
+
+    def positions_dataframe(self, session_key, driver_df):
         try:
-            response = urlopen(f'https://api.openf1.org/v1/position?session_key={session_key}')
+            response = urlopen(f'{self.base_url}position?session_key={session_key}')
             position_data = json.loads(response.read().decode('utf-8'))
             position_df = pd.DataFrame(position_data)
             position_df = position_df.groupby("position")["driver_number"].last().reset_index()
@@ -71,7 +75,7 @@ class GetDataframes:
     @staticmethod
     def top_10_dataframe(position_df, driver_df):
         try:
-            points = [25,18,15,12,10,8,6,4,2,1]
+            points = [25, 18, 15, 12, 10, 8, 6, 4, 2, 1]
             top_10_finish = position_df[:10]
             top_10_finish_df = pd.DataFrame({"Driver Number":top_10_finish["Driver Number"], "Points":points})
             top_10_finish_df["Driver"] = [driver_df[driver_df["driver_number"]==x]["name_acronym"].values[0] for x in top_10_finish_df["Driver Number"].values]
@@ -157,11 +161,11 @@ class GetDataframes:
         fastest_in_speed_trap = fastest_in_speed_trap.to_dict()
         return speed_trap_df, fastest_in_speed_trap
     
-    @staticmethod
-    def get_pit_intervals(session_key, driver_df):
+
+    def get_pit_intervals(self, session_key, driver_df):
         try:
-            pit_data = cached_api_call(f'https://api.openf1.org/v1/pit?session_key={session_key}&pit_duration<40')
-            time.sleep(0.5)  # Rate limiting
+            pit_data = cached_api_call(f'{self.base_url}pit?session_key={session_key}&pit_duration<40')
+            time.sleep(1)  # Rate limiting
             fastest_pit_stop = pd.DataFrame(pit_data)
             fastest_pit_stop = fastest_pit_stop.sort_values(by="pit_duration").head(1)
             # Convert driver_number to a list
@@ -182,7 +186,7 @@ class GetDataframes:
 def load_session_data(country, year):
     try:
         session_info = cached_api_call(f'https://api.openf1.org/v1/sessions?country_name={country}&session_name=Race&year={year}')
-        time.sleep(0.5)  # Rate limiting
+        time.sleep(1)  # Rate limiting
         
         if not session_info:
             return None, None, None
@@ -191,7 +195,7 @@ def load_session_data(country, year):
         circuit_name = session_info[0]["circuit_short_name"]
 
         laps_data = cached_api_call(f'https://api.openf1.org/v1/laps?session_key={session_key}')
-        time.sleep(0.5)  # Rate limiting
+        time.sleep(1)  # Rate limiting
 
         df = pd.DataFrame(data=laps_data)
         return df, session_key, circuit_name
