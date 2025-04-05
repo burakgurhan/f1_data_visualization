@@ -1,10 +1,15 @@
 import json
 import os
+import time
+import random
 from datetime import datetime, timedelta
 import hashlib
 from urllib.request import urlopen
+from urllib.error import HTTPError
 CACHE_DIR = "api_cache"
 CACHE_EXPIRY_HOURS = 24
+MAX_RETRIES = 3
+BASE_DELAY = 1.5  # seconds
 
 def get_cache_key(url):
     return hashlib.md5(url.encode()).hexdigest()
@@ -38,10 +43,25 @@ def cached_api_call(url):
     if cached is not None:
         return cached
         
-    # Make API call if no cache
-    response = urlopen(url)
-    data = json.loads(response.read().decode('utf-8'))
-    
-    # Store in cache
-    write_to_cache(url, data)
-    return data
+    # Exponential backoff with retries
+    retry_count = 0
+    while retry_count < MAX_RETRIES:
+        try:
+            # Random jitter to avoid thundering herd
+            delay = BASE_DELAY * (2 ** retry_count) + random.uniform(0, 0.5)
+            time.sleep(delay)
+            
+            response = urlopen(url)
+            data = json.loads(response.read().decode('utf-8'))
+            
+            # Store in cache
+            write_to_cache(url, data)
+            return data
+            
+        except HTTPError as e:
+            if e.code == 429:
+                retry_count += 1
+                if retry_count >= MAX_RETRIES:
+                    raise Exception(f"API rate limit exceeded after {MAX_RETRIES} retries")
+            else:
+                raise

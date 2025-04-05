@@ -10,7 +10,7 @@ from groq_integration import create_race_summary
 st.title("Formula 1 Data Visualization")
 
 # Sidebar
-year = st.sidebar.selectbox("Select Year", [2023, 2024, 2025], index=1)
+year = st.sidebar.selectbox("Select Year", [2023, 2024, 2025], index=2)
 
 country_names, meeting_names, display_names = GetDataframes.get_country_names(year)
 selected_race_name = st.sidebar.selectbox("Select Race", display_names, index=0)
