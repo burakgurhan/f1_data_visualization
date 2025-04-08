@@ -20,14 +20,15 @@ with st.spinner("Loading data..."):
     encoded_country_name = urllib.parse.quote(selected_country_name)
 
     # Load all dataframes
-    df, session_key, circuit_name = load_session_data(encoded_country_name, year)   
-    driver_df, team_colors, driver_dict = GetDataframes.drivers_dataframe(session_key=session_key)    # Driver and team informaitons
-    lap_times_df = GetDataframes.lap_times_df(df, driver_df)
-    position_df = GetDataframes.positions_dataframe(session_key, driver_df)
-    fastest_lap_df, fastest_lap = GetDataframes.fastest_lap_df(lap_times_df, driver_df)
-    top_10_df, podium, top_10 = GetDataframes.top_10_dataframe(position_df, driver_df)
-    speed_trap_df, fastest_in_speed_trap = GetDataframes.get_speed_trap_df(df, driver_df)
-    fastest_pit_stop_dict = GetDataframes.get_pit_intervals(session_key, driver_df)
+    df, session_key, circuit_name = load_session_data(encoded_country_name, year)
+    dataframes = GetDataframes()   
+    driver_df, team_colors, driver_dict = dataframes.drivers_dataframe(session_key=session_key)    # Driver and team informaitons
+    lap_times_df = dataframes.lap_times_df(df, driver_df)
+    position_df = dataframes.positions_dataframe(session_key, driver_df)
+    fastest_lap_df, fastest_lap = dataframes.fastest_lap_df(lap_times_df, driver_df)
+    top_10_df, podium, top_10 = dataframes.top_10_dataframe(position_df, driver_df)
+    speed_trap_df, fastest_in_speed_trap = dataframes.get_speed_trap_df(df, driver_df)
+    fastest_pit_stop_dict = dataframes.get_pit_intervals(session_key, driver_df)
 
     # Create race_info dictionary
     race_info = {}
