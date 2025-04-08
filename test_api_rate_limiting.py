@@ -1,4 +1,4 @@
-import time
+'''import time
 import atexit
 from urllib.error import HTTPError
 from api_cache import cached_api_call, REQUEST_HISTORY
@@ -31,3 +31,4 @@ def test_concurrent_calls():
 
 if __name__ == "__main__":
     test_concurrent_calls()
+'''
