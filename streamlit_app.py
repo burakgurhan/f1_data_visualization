@@ -14,7 +14,7 @@ year = st.sidebar.selectbox("Select Year", [2023, 2024, 2025], index=2)
 
 with st.spinner("Loading data..."):
     country_names, meeting_names, display_names = GetDataframes().get_country_names(year)
-    selected_race_name = st.sidebar.selectbox("Select Race", display_names, index=-1)
+    selected_race_name = st.sidebar.selectbox("Select Race", display_names, index=len(country_names)-1)
     selected_country_name = selected_race_name.split(" - ")[0]
     selected_meeting_name = selected_race_name.split(" - ")[1]
     encoded_country_name = urllib.parse.quote(selected_country_name)
