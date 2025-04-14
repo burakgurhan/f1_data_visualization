@@ -7,7 +7,7 @@ from visualization import get_boundaries
 class GetDataframes:
     def __init__(self):
         self.base_url = 'https://api.openf1.org/v1/'
-        self.get_boundaries = get_boundaries()
+        self.get_boundaries = get_boundaries
 
 
     def load_calendar(self):
