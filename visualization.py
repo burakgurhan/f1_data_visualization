@@ -52,7 +52,7 @@ def plot_team_performance(team_performance_df, team_colors):
 
 def plot_heatmap_of_speed_traps(speed_trap_df):
     fig = go.Figure(data=go.Heatmap(
-        z=speed_trap_df.values,
+        z=speed_trap_df.max(15).values,
         x=speed_trap_df.columns,
         y=speed_trap_df.index,
         colorscale='hot'
