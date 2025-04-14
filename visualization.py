@@ -1,7 +1,5 @@
 import plotly.express as px
 import plotly.graph_objects as go 
-import matplotlib.pyplot as plt 
-import seaborn as sns
 
 def get_boundaries(df):
     Q1 = df.quantile(0.25)
@@ -50,6 +48,18 @@ def plot_team_performance(team_performance_df, team_colors):
                 color_discrete_map=team_colors
                 )
     return fig
+
+
+def plot_heatmap_of_speed_traps(speed_trap_df):
+    fig = go.Figure(data=go.Heatmap(
+        z=speed_trap_df.values,
+        x=speed_trap_df.columns,
+        y=speed_trap_df.index,
+        colorscale='hot'
+        )
+        )    
+    return fig
+
 
 def plot_top10(top_10_finish_df, country):
     top_10_finish_df_sorted = top_10_finish_df.sort_values(by="Points", ascending=True)

@@ -1,4 +1,3 @@
-import json
 import urllib
 import streamlit as st
 from urllib.request import urlopen
@@ -105,6 +104,8 @@ st.plotly_chart(team_performance)
 # 10. Speed Trap 
 st.header("Speed Trap")
 st.dataframe(speed_trap_df.max().reset_index(name="Max in Speed Trap"), hide_index=True, use_container_width=False)
+st.plotly_chart(plot_heatmap_of_speed_traps(speed_trap_df))
+
 
 # 11. Lap times of All Drivers
 st.header("Lap Times of Drivers")
