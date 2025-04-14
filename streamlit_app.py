@@ -90,13 +90,13 @@ st.plotly_chart(boxplot)
 
 # 8. Driver Comparision
 st.subheader("Driver Comparisions")
-driver_comparision_df = GetDataframes.get_driver_performance(lap_times_df, driver_df)
+driver_comparision_df = GetDataframes().get_driver_performance(lap_times_df, driver_df)
 st.dataframe(driver_comparision_df, hide_index=True)
 
 
 # 9. Performance of the Teams
 st.header("Performance of the Teams")
-team_performance_df = GetDataframes.get_teams_performance(driver_comparision_df)
+team_performance_df = GetDataframes().get_teams_performance(driver_comparision_df)
 team_performance = plot_team_performance(team_performance_df, team_colors)
 st.plotly_chart(team_performance)
 
