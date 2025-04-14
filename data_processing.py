@@ -2,10 +2,12 @@ import json
 import pandas as pd
 from constants import team_colors
 from urllib.request import urlopen
+from visualization import get_boundaries
 
 class GetDataframes:
     def __init__(self):
         self.base_url = 'https://api.openf1.org/v1/'
+        self.get_boundaries = get_boundaries()
 
 
     def load_calendar(self):
@@ -112,8 +114,10 @@ class GetDataframes:
         return lap_times_df
     
     @staticmethod
-    def get_driver_performance(lap_times_df, driver_df):
+    def get_driver_performance(self, lap_times_df, driver_df):
         try:
+            lap_times_df = self.get_boundaries(lap_times_df)
+            lap_times_df = lap_times_df.astype(float)
             min_lap_times = lap_times_df.min().rename("Fastest Lap of Drivers")
             avg_lap_times = lap_times_df.mean().rename("Average Lap Times of Drivers")
 
