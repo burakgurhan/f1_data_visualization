@@ -24,7 +24,7 @@ def plot_heatmap_of_laptimes(lap_times_df):
 
 def line_plot_of_laptimes(lap_times_df,top_10_finish_df):
     lower_bound, upper_bound = get_boundaries(lap_times_df)
-    lap_times_df = lap_times_df[(lap_times_df<upper_bound.min())&(lap_times_df>lower_bound.max())]
+    lap_times_df = lap_times_df[(lap_times_df<upper_bound.median())&(lap_times_df>lower_bound.median())]
     fig = px.line(data_frame=lap_times_df[top_10_finish_df["Driver"][:6]],
                   line_shape="spline"
                   )
