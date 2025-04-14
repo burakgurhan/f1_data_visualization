@@ -24,6 +24,7 @@ with st.spinner("Loading data..."):
     dataframes = GetDataframes()   
     driver_df, team_colors, driver_dict = dataframes.drivers_dataframe(session_key=session_key)    # Driver and team informaitons
     lap_times_df = dataframes.lap_times_df(df, driver_df)
+    lower_bound, upper_bound = get_boundaries(lap_times_df)
     position_df = dataframes.positions_dataframe(session_key, driver_df)
     fastest_lap_df, fastest_lap = dataframes.fastest_lap_df(lap_times_df, driver_df)
     top_10_df, podium, top_10 = dataframes.top_10_dataframe(position_df, driver_df)
@@ -90,13 +91,13 @@ st.plotly_chart(boxplot)
 
 # 8. Driver Comparision
 st.subheader("Driver Comparisions")
-driver_comparision_df = GetDataframes().get_driver_performance(lap_times_df, driver_df)
+driver_comparision_df = GetDataframes.get_driver_performance(lap_times_df, driver_df, lower_bound, upper_bound)
 st.dataframe(driver_comparision_df, hide_index=True)
 
 
 # 9. Performance of the Teams
 st.header("Performance of the Teams")
-team_performance_df = GetDataframes().get_teams_performance(driver_comparision_df)
+team_performance_df = GetDataframes.get_teams_performance(driver_comparision_df, lower_bound, upper_bound)
 team_performance = plot_team_performance(team_performance_df, team_colors)
 st.plotly_chart(team_performance)
 

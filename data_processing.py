@@ -114,9 +114,8 @@ class GetDataframes:
         return lap_times_df
     
     @staticmethod
-    def get_driver_performance(self, lap_times_df, driver_df):
+    def get_driver_performance(lap_times_df, driver_df, lower_bound=None, upper_bound=None):
         try:
-            lower_bound, upper_bound = self.get_boundaries(lap_times_df)
             lap_times_df = lap_times_df[(lap_times_df<upper_bound.median())&(lap_times_df>lower_bound.median())]
             lap_times_df = lap_times_df.astype(float)
             min_lap_times = lap_times_df.min().rename("Fastest Lap of Drivers")
@@ -132,8 +131,9 @@ class GetDataframes:
             return []
     
     @staticmethod
-    def get_teams_performance(driver_comparision_df):
+    def get_teams_performance(driver_comparision_df, lower_bound, upper_bound):
         try:
+            driver_comparision_df = driver_comparision_df[(driver_comparision_df["Average Lap Times of Drivers"]<upper_bound.median())&(driver_comparision_df["Average Lap Times of Drivers"]>lower_bound.median())]
             avg_team_times_df = driver_comparision_df.groupby("Teams")["Average Lap Times of Drivers"].mean().rename({"Average Lap Times of Drivers":"Average Lap Times of Teams"}).sort_values()
             avg_team_times_df = avg_team_times_df.reset_index(name="Average Lap Times of Teams")
             avg_team_times_df["Team Differences"] = avg_team_times_df["Average Lap Times of Teams"] - avg_team_times_df["Average Lap Times of Teams"].min()
