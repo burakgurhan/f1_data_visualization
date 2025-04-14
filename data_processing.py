@@ -116,7 +116,8 @@ class GetDataframes:
     @staticmethod
     def get_driver_performance(self, lap_times_df, driver_df):
         try:
-            lap_times_df = self.get_boundaries(lap_times_df)
+            lower_bound, upper_bound = self.get_boundaries(lap_times_df)
+            lap_times_df = lap_times_df[(lap_times_df<upper_bound.median())&(lap_times_df>lower_bound.median())]
             lap_times_df = lap_times_df.astype(float)
             min_lap_times = lap_times_df.min().rename("Fastest Lap of Drivers")
             avg_lap_times = lap_times_df.mean().rename("Average Lap Times of Drivers")
