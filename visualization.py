@@ -49,7 +49,7 @@ def plot_team_performance(team_performance_df, team_colors):
                 )
     return fig
 
-
+"""
 def plot_heatmap_of_speed_traps(speed_trap_df):
     fig = go.Figure(data=go.Heatmap(
         z=speed_trap_df.max(15).values,
@@ -59,7 +59,7 @@ def plot_heatmap_of_speed_traps(speed_trap_df):
         )
         )    
     return fig
-
+"""
 
 def plot_top10(top_10_finish_df, country):
     top_10_finish_df_sorted = top_10_finish_df.sort_values(by="Points", ascending=True)
