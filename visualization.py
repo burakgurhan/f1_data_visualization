@@ -25,7 +25,7 @@ def line_plot_of_laptimes(lap_times_df,top_10_finish_df):
     lap_times_df = lap_times_df[(lap_times_df<upper_bound.median())&(lap_times_df>lower_bound.median())]
     fig = px.line(data_frame=lap_times_df[top_10_finish_df["Driver"][:6]],
                   line_shape="spline",
-                  labels={"value":"Lap Times", "variable":"Driver"}
+                  labels={"value":"Times", "index":"Lap"}
                   )
     fig.update_layout(yaxis_range=[lower_bound[0], upper_bound[0]])
     return fig
