@@ -5,8 +5,8 @@ def get_boundaries(df):
     Q1 = df.quantile(0.25)
     Q3 = df.quantile(0.75)
     IQR = Q3 - Q1
-    lower_bound = Q1 - 1.5 * IQR
-    upper_bound = Q3 + 1.5 * IQR
+    lower_bound = Q1 - 2 * IQR
+    upper_bound = Q3 + 2 * IQR
     return lower_bound, upper_bound
 
 def plot_heatmap_of_laptimes(lap_times_df):
@@ -24,7 +24,8 @@ def line_plot_of_laptimes(lap_times_df,top_10_finish_df):
     lower_bound, upper_bound = get_boundaries(lap_times_df)
     lap_times_df = lap_times_df[(lap_times_df<upper_bound.median())&(lap_times_df>lower_bound.median())]
     fig = px.line(data_frame=lap_times_df[top_10_finish_df["Driver"][:6]],
-                  line_shape="spline"
+                  line_shape="spline",
+                  labels={"value":"Lap Times", "variable":"Driver"}
                   )
     fig.update_layout(yaxis_range=[lower_bound[0], upper_bound[0]])
     return fig

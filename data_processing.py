@@ -124,16 +124,15 @@ class GetDataframes:
             driver_comparision_df = pd.merge(min_lap_times, avg_lap_times, on=min_lap_times.index)
             driver_comparision_df["Teams"] = [driver_df[driver_df['name_acronym']==x]["team_name"].values[0] for x in driver_comparision_df["key_0"]]
             driver_comparision_df.rename(columns={"key_0":"Driver"})
-            driver_comparision_df.sort_values(by="Fastest Lap of Drivers", inplace=True)
+            driver_comparision_df.sort_values(by="Average Lap Times of Drivers", inplace=True)
             return driver_comparision_df
         except Exception as e:
             print(f"Error: {e}")
             return []
     
     @staticmethod
-    def get_teams_performance(driver_comparision_df, lower_bound, upper_bound):
+    def get_teams_performance(driver_comparision_df):
         try:
-            driver_comparision_df = driver_comparision_df[(driver_comparision_df["Average Lap Times of Drivers"]<upper_bound.median())&(driver_comparision_df["Average Lap Times of Drivers"]>lower_bound.median())]
             avg_team_times_df = driver_comparision_df.groupby("Teams")["Average Lap Times of Drivers"].mean().rename({"Average Lap Times of Drivers":"Average Lap Times of Teams"}).sort_values()
             avg_team_times_df = avg_team_times_df.reset_index(name="Average Lap Times of Teams")
             avg_team_times_df["Team Differences"] = avg_team_times_df["Average Lap Times of Teams"] - avg_team_times_df["Average Lap Times of Teams"].min()

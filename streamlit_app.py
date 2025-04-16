@@ -77,7 +77,7 @@ st.plotly_chart(heatmap)
 
 
 # 6. Line Graph for Lap times of Drivers 
-st.header("Line Graph for Lap times of Drivers")
+st.header("Line Plot for Lap times of Drivers")
 lineplot = line_plot_of_laptimes(lap_times_df,top_10_df)
 st.plotly_chart(lineplot)
 
@@ -96,7 +96,7 @@ st.dataframe(driver_comparision_df, hide_index=True)
 
 # 9. Performance of the Teams
 st.header("Performance of the Teams")
-team_performance_df = GetDataframes.get_teams_performance(driver_comparision_df, lower_bound, upper_bound)
+team_performance_df = GetDataframes.get_teams_performance(driver_comparision_df)
 team_performance = plot_team_performance(team_performance_df, team_colors)
 st.plotly_chart(team_performance)
 
